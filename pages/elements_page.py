@@ -1,6 +1,8 @@
 from generator.generator import generated_person
-from locators.elements_page_locators import TextBoxPageLocators
+from locators.elements_page_locators import CheckBoxPageLocators, TextBoxPageLocators
 from pages.base_page import BasePage
+
+import random
 
 
 class TextBoxPage(BasePage):
@@ -40,3 +42,66 @@ class TextBoxPage(BasePage):
             self.locators.CREATED_PERMANENT_ADDRESS
         ).text.split(":")[1]
         return full_name, email, current_address, permanent_address
+
+
+class CheckBoxPage(BasePage):
+
+    locators = CheckBoxPageLocators()
+
+    def open_full_list(self):
+        """
+        Expand all checkbox tree elements.
+        """
+
+        while True:
+            tree_switcher = self.driver.find_elements(*self.locators.TREE_SWITCHER_LIST)
+
+            if not tree_switcher:
+                break
+
+            tree_switcher[0].click()
+
+    def clicl_random_checkbox(self):
+        """
+        Click random checkboxes.
+        """
+
+        checkbox_item_list = self.element_are_visiblle(self.locators.CHECK_BOX_LIST)
+        count = 21
+        while count != 0:
+            item = checkbox_item_list[random.randint(1, 15)]
+            if count > 0:
+                self.go_to_element(item)
+                item.click()
+                count -= 1
+            else:
+                break
+
+    def get_checked_checkboxes(self):
+        """
+        Get title from checked checkboxes.
+        """
+
+        checked_list = self.elements_are_present(self.locators.CHECKED_ITEMS)
+        data = []
+        for box in checked_list:
+            title_item = box.find_element(*self.locators.TITLE_ITEM)
+            data.append(title_item.text)
+        return (
+            str(sorted(data))
+            .replace(" ", "")
+            .replace("doc", "")
+            .replace(".", "")
+            .lower()
+        )
+
+    def get_output_result(self):
+        """
+        Get the output result after checking the checkboxes.
+        """
+
+        result_list = self.elements_are_present(self.locators.OUTPUT_RESULT)
+        data = []
+        for item in result_list:
+            data.append(item.text)
+        return str(sorted(data)).replace(" ", "").lower()

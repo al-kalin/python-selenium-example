@@ -17,3 +17,14 @@ class TextBoxPageLocators:
     CREATED_EMAIL = (By.CSS_SELECTOR, "#output #email")
     CREATED_CURRENT_ADDRESS = (By.CSS_SELECTOR, "#output #currentAddress")
     CREATED_PERMANENT_ADDRESS = (By.CSS_SELECTOR, "#output #permanentAddress")
+
+
+
+class CheckBoxPageLocators:
+
+    TREE_SWITCHER_LIST = (By.CSS_SELECTOR, "span.rc-tree-switcher_close")
+    CHECK_BOX_LIST = (By.CSS_SELECTOR, "span.rc-tree-checkbox")
+    CHECK_BOX_TITLE_LIST = (By.CSS_SELECTOR, "span[class='rc-tree-title']")
+    CHECKED_ITEMS = (By.CSS_SELECTOR, "div[role='treeitem'].rc-tree-treenode-checkbox-checked")
+    TITLE_ITEM = (By.XPATH, ".//ancestor::span[@class='rc-tree-title']")
+    OUTPUT_RESULT = (By.CSS_SELECTOR, "span[class='text-success']")
