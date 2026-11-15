@@ -28,3 +28,11 @@ class CheckBoxPageLocators:
     CHECKED_ITEMS = (By.CSS_SELECTOR, "div[role='treeitem'].rc-tree-treenode-checkbox-checked")
     TITLE_ITEM = (By.XPATH, ".//ancestor::span[@class='rc-tree-title']")
     OUTPUT_RESULT = (By.CSS_SELECTOR, "span[class='text-success']")
+
+
+class RadioButtonPageLocators:
+
+    YES_RADIOBUTTON = (By.CSS_SELECTOR, "label[class^='form-check'][for='yesRadio']")
+    IMPRESSIVE_RADIOBUTTON = (By.CSS_SELECTOR, "label[class^='form-check'][for='impressiveRadio']")
+    NO_RADIOBUTTON = (By.CSS_SELECTOR, "label[class^='form-check'][for='noRadio']")
+    OUTPUT_RESULT = (By.CSS_SELECTOR, "p span[class='text-success']")
