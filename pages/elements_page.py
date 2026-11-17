@@ -3,6 +3,7 @@ from locators.elements_page_locators import (
     CheckBoxPageLocators,
     RadioButtonPageLocators,
     TextBoxPageLocators,
+    WebTablePageLocators,
 )
 from pages.base_page import BasePage
 
@@ -134,3 +135,87 @@ class RadioButtonPage(BasePage):
         """
 
         return self.element_is_present(self.locators.OUTPUT_RESULT).text
+
+
+class WebTablePage(BasePage):
+
+    locators = WebTablePageLocators()
+
+    def add_new_person(self):
+        """
+        Add a new person to the web table using randomly generated data.
+
+        Steps:
+            1. Generate random personal and employment information.
+            2. Extract the person's first name, last name, email, age,
+            salary, and department.
+            3. Click the Add button to open the registration form.
+            4. Fill in all form fields with the generated data.
+            5. Submit the form.
+            6. Return the data of the newly added person.
+
+        Returns:
+            list: A list containing the person's first name, last name,
+            age, email, salary, and department.
+        """
+        count = 1
+        while count != 0:
+            person_info = next(generated_person())
+            firstname = person_info.first_name
+            lastname = person_info.last_name
+            email = person_info.email
+            age = person_info.age
+            salary = person_info.salary
+            department = person_info.department
+            self.element_is_visiblle(self.locators.ADD_BUTTON).click()
+            self.element_is_visiblle(self.locators.FIRST_NAME_INPUT).send_keys(
+                firstname
+            )
+            self.element_is_visiblle(self.locators.LAST_NAME_INPUT).send_keys(lastname)
+            self.element_is_visiblle(self.locators.EMAIL_INPUT).send_keys(email)
+            self.element_is_visiblle(self.locators.AGE_INPUT).send_keys(age)
+            self.element_is_visiblle(self.locators.SALARY_INPYT).send_keys(salary)
+            self.element_is_visiblle(self.locators.DEPARTMENT_INPUT).send_keys(
+                department
+            )
+            self.element_is_visiblle(self.locators.SUBMIT).click()
+            count -= 1
+            return [firstname, lastname, str(age), email, str(salary), department]
+
+    def get_people_list(self):
+        """
+        Retrieve and organize all displayed records from the web table.
+
+        Steps:
+            1. Find all elements containing the table records.
+            2. Extract the text content from each element.
+            3. Group the extracted data into lists of six values per person,
+            excluding the seventh element (action buttons).
+            4. Return the list of people with their corresponding data.
+
+        Returns:
+            list: A list of people, where each person is represented by
+            a list containing first name, last name, age, email, salary,
+            and department.
+        """
+        people_list = self.elements_are_present(self.locators.FULL_PEOPLE_LIST)
+        data = []
+        for item in people_list:
+            person_data = item.text
+            data.append(person_data)
+        data = [data[i : i + 6] for i in range(0, len(data), 7)]
+        return data
+
+    def search_some_person(self, key_word):
+        """
+        Search for a person in the web table using a specified keyword.
+
+        Steps:
+            1. Locate the search input field.
+            2. Enter the specified keyword into the search field.
+
+        Args:
+            key_word (str): The keyword used to search for a person
+            in the web table.
+        """
+        self.element_is_visiblle(self.locators.SEARCH_INPUT).send_keys(key_word)
