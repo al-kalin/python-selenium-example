@@ -11,6 +11,11 @@ import random
 
 
 class TextBoxPage(BasePage):
+    """
+    Page Object class for the Text Box page.
+        
+    Provides methods for interacting with the web table.
+    """
 
     locators = TextBoxPageLocators()
 
@@ -19,7 +24,7 @@ class TextBoxPage(BasePage):
         full_name = person_info.full_name
         email = person_info.email
         current_address = person_info.current_address
-        permanent_address = person_info.permanent_adress
+        permanent_address = person_info.permanent_address
         self.element_is_visiblle(self.locators.FULL_NAME).send_keys(full_name)
         self.element_is_visiblle(self.locators.EMAIL).send_keys(email)
         self.element_is_visiblle(self.locators.CURRENT_ADDRESS).send_keys(
@@ -51,6 +56,11 @@ class TextBoxPage(BasePage):
 
 
 class CheckBoxPage(BasePage):
+    """
+    Page Object class for the Check Box page.
+        
+    Provides methods for interacting with the web table.
+    """
 
     locators = CheckBoxPageLocators()
 
@@ -114,6 +124,11 @@ class CheckBoxPage(BasePage):
 
 
 class RadioButtonPage(BasePage):
+    """
+    Page Object class for the Radio Button page.
+    
+    Provides methods for interacting with the web table.
+    """
 
     locators = RadioButtonPageLocators()
 
@@ -138,6 +153,11 @@ class RadioButtonPage(BasePage):
 
 
 class WebTablePage(BasePage):
+    """
+    Page Object class for the Web Tables page.
+
+    Provides methods for interacting with the web table.
+    """
 
     locators = WebTablePageLocators()
 
@@ -198,7 +218,9 @@ class WebTablePage(BasePage):
             a list containing first name, last name, age, email, salary,
             and department.
         """
-        people_list = self.elements_are_present(self.locators.FULL_PEOPLE_LIST)
+        people_list = self.elements_are_present_or_empty(self.locators.FULL_PEOPLE_LIST)
+        if not people_list:
+            return None
         data = []
         for item in people_list:
             person_data = item.text
@@ -219,3 +241,43 @@ class WebTablePage(BasePage):
             in the web table.
         """
         self.element_is_visiblle(self.locators.SEARCH_INPUT).send_keys(key_word)
+
+    def update_person_info(self):
+        """
+        Update a person's age in the web table using randomly generated data.
+
+        Steps:
+            1. Generate a person with randomly generated data.
+            2. Retrieve the generated person's age.
+            3. Click the Edit button for the person's record.
+            4. Clear the existing age value.
+            5. Enter the newly generated age.
+            6. Submit the updated information.
+            7. Return the updated age.
+
+        Expected result:
+            The person's age is successfully updated,
+            and the new age is returned as a string.
+        """
+
+        person_info = next(generated_person())
+        age = person_info.age
+        self.element_is_visiblle(self.locators.EDIT_BUTTON).click()
+        age_input = self.element_is_visiblle(self.locators.AGE_INPUT)
+        age_input.clear()
+        age_input.send_keys(age)
+        self.element_is_visiblle(self.locators.SUBMIT).click()
+        return str(age)
+
+    def delete_person(self):
+        """
+        Delete a person's record from the web table.
+
+        Steps:
+            1. Locate the Delete button for the person's record.
+            2. Click the Delete button.
+
+        Expected result:
+            The person's record is successfully deleted from the web table.
+        """
+        self.element_is_visiblle(self.locators.DELETE_BUTTON).click()

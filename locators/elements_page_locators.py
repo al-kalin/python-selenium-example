@@ -63,3 +63,4 @@ class WebTablePageLocators:
     FULL_PEOPLE_LIST = (By.CSS_SELECTOR, "tbody tr td")
     SEARCH_INPUT = (By.CSS_SELECTOR, "input[id='searchBox']")
     DELETE_BUTTON = (By.CSS_SELECTOR, "span[title='Delete']")
+    EDIT_BUTTON = (By.CSS_SELECTOR, "span[title='Edit']")

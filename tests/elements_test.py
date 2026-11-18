@@ -182,3 +182,59 @@ class TestElements:
                 assert (
                     key_word in person
                 ), f"Search word '{key_word}' not found in: {person.text}"
+
+
+        def test_web_table_update_person_info(self, driver):
+            """
+            Verify that a person's information can be successfully updated
+            in the web table.
+
+            Steps:
+                1. Open the Web Tables page.
+                2. Add a new person with randomly generated data.
+                3. Retrieve the last name of the newly added person.
+                4. Search for the person using their last name.
+                5. Update the person's information.
+                6. Retrieve the updated table records.
+                7. Verify that the updated age is displayed in the person's record.
+
+            Expected result:
+                The person's information is successfully updated,
+                and the new age is correctly displayed in the table.
+            """
+            web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
+            web_table_page.open()
+            new_person_lastname = web_table_page.add_new_person()[1]
+            time.sleep(3)
+            web_table_page.search_some_person(new_person_lastname)
+            age = web_table_page.update_person_info()
+            row = web_table_page.get_people_list()
+            assert age in row[0], "The person card has not been changed"
+
+        def test_web_table_delete_person(self, driver):
+            """
+            Verify that a person can be successfully deleted from the web table.
+
+            Steps:
+                1. Open the Web Tables page.
+                2. Add a new person with randomly generated data.
+                3. Retrieve the email address of the newly added person.
+                4. Search for the person using their email address.
+                5. Delete the person's record.
+                6. Retrieve the table records after deletion.
+                7. Verify that the table contains no records.
+
+            Expected result:
+                The person's record is successfully deleted,
+                and no matching records remain in the table.
+            """
+            web_table_page = WebTablePage(driver, "https://demoqa.com/webtables")
+            web_table_page.open()
+            new_person_email = web_table_page.add_new_person()[3]
+            time.sleep(3)
+            web_table_page.search_some_person(new_person_email)
+            web_table_page.delete_person()
+            row = web_table_page.get_people_list()
+            print(row)
+            print(new_person_email)
+            assert not row, "The person was not deleted from the table."
