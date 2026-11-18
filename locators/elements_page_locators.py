@@ -1,7 +1,17 @@
+"""
+Module containing locator classes for different pages of the DemoQA application.
+
+Provides centralized definitions of web element locators used
+by Page Object classes to interact with page elements.
+"""
+
 from selenium.webdriver.common.by import By
 
 
 class TextBoxPageLocators:
+    """
+    Locators for elements on the Text Box page.
+    """
 
     # form fields
 
@@ -20,6 +30,9 @@ class TextBoxPageLocators:
 
 
 class CheckBoxPageLocators:
+    """
+    Locators for elements on the Check Box page.
+    """
 
     TREE_SWITCHER_LIST = (By.CSS_SELECTOR, "span.rc-tree-switcher_close")
     CHECK_BOX_LIST = (By.CSS_SELECTOR, "span.rc-tree-checkbox")
@@ -48,6 +61,9 @@ class RadioButtonPageLocators:
 
 
 class WebTablePageLocators:
+    """
+    Locators for elements on the Web Table page.
+    """
 
     # add person form
     ADD_BUTTON = (By.CSS_SELECTOR, "button[id='addNewRecordButton']")
@@ -64,3 +80,19 @@ class WebTablePageLocators:
     SEARCH_INPUT = (By.CSS_SELECTOR, "input[id='searchBox']")
     DELETE_BUTTON = (By.CSS_SELECTOR, "span[title='Delete']")
     EDIT_BUTTON = (By.CSS_SELECTOR, "span[title='Edit']")
+
+
+class ButtonsPageLocators:
+    """
+    Locators for elements on the Buttons page.
+    """
+
+    # buttons
+    DOUBLE_CLICK_BUTTON = (By.CSS_SELECTOR, "button[id='doubleClickBtn']")
+    RIGHT_CLICK_BUTTON = (By.CSS_SELECTOR, "button[id='rightClickBtn']")
+    CLICK_ME_BUTTON = (By.XPATH, "(.//div[@class='mt-4']/button)[2]")
+
+    # result
+    SUCCCESS_DOUBLE = (By.CSS_SELECTOR, "p[id='doubleClickMessage']")
+    SUCCCESS_RIGHT = (By.CSS_SELECTOR, "p[id='rightClickMessage']")
+    SUCCCESS_CLICK_ME = (By.CSS_SELECTOR, "p[id='dynamicClickMessage']")

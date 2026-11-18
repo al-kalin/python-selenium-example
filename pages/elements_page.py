@@ -1,5 +1,16 @@
+"""
+Module containing Page Object classes for the Elements section
+of the DemoQA application.
+
+Provides methods for interacting with page elements, filling out forms,
+selecting options, managing table records, and validating page content.
+"""
+
+import random
+
 from generator.generator import generated_person
 from locators.elements_page_locators import (
+    ButtonsPageLocators,
     CheckBoxPageLocators,
     RadioButtonPageLocators,
     TextBoxPageLocators,
@@ -7,19 +18,33 @@ from locators.elements_page_locators import (
 )
 from pages.base_page import BasePage
 
-import random
-
 
 class TextBoxPage(BasePage):
     """
     Page Object class for the Text Box page.
-        
-    Provides methods for interacting with the web table.
+
+    Provides methods for interacting with the text boxes.
     """
 
     locators = TextBoxPageLocators()
 
     def fill_all_fields(self):
+        """
+        Fill in all fields of the Text Box form using randomly generated data.
+
+        Steps:
+            1. Generate a person with randomly generated data.
+            2. Retrieve the person's full name, email, current address,
+            and permanent address.
+            3. Fill in all form fields with the generated data.
+            4. Submit the form.
+            5. Return the submitted data, replacing newline characters
+            in the addresses with spaces.
+
+        Returns:
+            tuple: A tuple containing the full name, email, current address,
+            and permanent address.
+        """
         person_info = next(generated_person())
         full_name = person_info.full_name
         email = person_info.email
@@ -42,6 +67,20 @@ class TextBoxPage(BasePage):
         )
 
     def check_filled_form(self):
+        """
+        Retrieve the submitted data displayed after filling out the Text Box form.
+
+        Steps:
+            1. Locate the displayed full name and extract its value.
+            2. Locate the displayed email and extract its value.
+            3. Locate the displayed current address and extract its value.
+            4. Locate the displayed permanent address and extract its value.
+            5. Return all extracted values as a tuple.
+
+        Returns:
+            tuple: A tuple containing the full name, email, current address,
+            and permanent address displayed on the page.
+        """
         full_name = self.element_is_present(self.locators.CREATED_FULL_NAME).text.split(
             ":"
         )[1]
@@ -58,8 +97,8 @@ class TextBoxPage(BasePage):
 class CheckBoxPage(BasePage):
     """
     Page Object class for the Check Box page.
-        
-    Provides methods for interacting with the web table.
+
+    Provides methods for interacting with the check boxes.
     """
 
     locators = CheckBoxPageLocators()
@@ -126,8 +165,8 @@ class CheckBoxPage(BasePage):
 class RadioButtonPage(BasePage):
     """
     Page Object class for the Radio Button page.
-    
-    Provides methods for interacting with the web table.
+
+    Provides methods for interacting with the radio buttons.
     """
 
     locators = RadioButtonPageLocators()
@@ -281,3 +320,63 @@ class WebTablePage(BasePage):
             The person's record is successfully deleted from the web table.
         """
         self.element_is_visiblle(self.locators.DELETE_BUTTON).click()
+
+
+class ButtonsPage(BasePage):
+    """
+    Page Object class for the Buttons page.
+
+    Provides methods for interacting with the buttons.
+    """
+
+    locators = ButtonsPageLocators()
+
+    def click_on_different_button(self, type_click):
+        """
+        Perform the specified click action on a button and verify the result.
+
+        Steps:
+            1. Check the specified click type.
+            2. Perform a double-click, right-click, or regular click
+            on the corresponding button.
+            3. Retrieve the success message displayed after the interaction.
+            4. Return the success message.
+
+        Args:
+            type_click (str): The type of click action to perform.
+                Accepted values are "double", "right", and "click".
+
+        Returns:
+            str: The success message displayed after the button interaction.
+        """
+        if type_click == "double":
+            self.action_double_click(
+                self.element_is_visiblle(self.locators.DOUBLE_CLICK_BUTTON)
+            )
+            return self.check_clicked_on_the_button(self.locators.SUCCCESS_DOUBLE)
+
+        if type_click == "right":
+            self.action_right_click(
+                self.element_is_visiblle(self.locators.RIGHT_CLICK_BUTTON)
+            )
+            return self.check_clicked_on_the_button(self.locators.SUCCCESS_RIGHT)
+
+        if type_click == "click":
+            self.element_is_visiblle(self.locators.CLICK_ME_BUTTON).click()
+            return self.check_clicked_on_the_button(self.locators.SUCCCESS_CLICK_ME)
+
+    def check_clicked_on_the_button(self, element):
+        """
+        Retrieve the success message displayed after a button interaction.
+
+        Steps:
+            1. Locate the success message element.
+            2. Extract and return its text content.
+
+        Args:
+            element (tuple): Locator used to find the success message element.
+
+        Returns:
+            str: The text of the success message.
+        """
+        return self.element_is_present(element).text

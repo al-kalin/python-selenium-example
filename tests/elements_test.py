@@ -1,8 +1,21 @@
+"""
+Module containing automated tests for the Elements section
+of the DemoQA application.
+
+Verifies user interactions, form submissions, data validation,
+and expected page behavior using Selenium WebDriver and pytest.
+"""
+
 import time
-
-from pages.elements_page import CheckBoxPage, RadioButtonPage, TextBoxPage, WebTablePage
-
 import random
+
+from pages.elements_page import (
+    ButtonsPage,
+    CheckBoxPage,
+    RadioButtonPage,
+    TextBoxPage,
+    WebTablePage,
+)
 
 
 class TestElements:
@@ -183,7 +196,6 @@ class TestElements:
                     key_word in person
                 ), f"Search word '{key_word}' not found in: {person.text}"
 
-
         def test_web_table_update_person_info(self, driver):
             """
             Verify that a person's information can be successfully updated
@@ -238,3 +250,43 @@ class TestElements:
             print(row)
             print(new_person_email)
             assert not row, "The person was not deleted from the table."
+
+    class TestButtonsPage:
+        """
+        Test suite for the Buttons page functionality.
+
+        Covers double-click, right-click, and regular button interactions,
+        verifying that the expected success messages are displayed.
+        """
+
+        def test_different_click_on_the_buttons(self, driver):
+            """
+            Verify that different click actions on buttons work correctly.
+
+            Steps:
+                1. Open the Buttons page.
+                2. Perform a double-click on the Double Click button.
+                3. Verify the displayed success message.
+                4. Perform a right-click on the Right Click button.
+                5. Verify the displayed success message.
+                6. Perform a regular click on the Click Me button.
+                7. Verify the displayed success message.
+
+            Expected result:
+                All three click actions are performed successfully,
+                and the corresponding success messages are displayed.
+            """
+            button_page = ButtonsPage(driver, "https://demoqa.com/buttons")
+            button_page.open()
+            double = button_page.click_on_different_button("double")
+            right = button_page.click_on_different_button("right")
+            click = button_page.click_on_different_button("click")
+            assert (
+                double == "You have done a double click"
+            ), "The double click button was not pressed"
+            assert (
+                right == "You have done a right click"
+            ), "The right click button was not pressed"
+            assert (
+                click == "You have done a dynamic click"
+            ), "The dynamic click button was not pressed"
