@@ -8,10 +8,13 @@ selecting options, managing table records, and validating page content.
 
 import random
 
+import requests
+
 from generator.generator import generated_person
 from locators.elements_page_locators import (
     ButtonsPageLocators,
     CheckBoxPageLocators,
+    LinksPageLocators,
     RadioButtonPageLocators,
     TextBoxPageLocators,
     WebTablePageLocators,
@@ -380,3 +383,57 @@ class ButtonsPage(BasePage):
             str: The text of the success message.
         """
         return self.element_is_present(element).text
+
+
+class LinksPage(BasePage):
+    """
+    Page Object class for the Links page.
+
+    Provides methods for interacting with the links.
+    """
+
+    locators = LinksPageLocators()
+
+    def check_new_tab_simple_link(self):
+        """Verify that the Simple Link opens successfully in a new tab.
+
+        Checks the link's HTTP response status, clicks the link if the
+        response is successful, switches to the newly opened tab, and
+        returns the expected and actual URLs.
+
+        Returns:
+            tuple: The link URL and either the opened tab URL or
+            the HTTP response status code.
+        """
+        simple_link = self.element_is_visiblle(self.locators.SIMPLE_LINK)
+        link_href = simple_link.get_attribute("href")
+        request = requests.get(link_href)
+        if request.status_code == 200:
+            simple_link.click()
+            self.switch_to_new_tab(1)
+            url = self.driver.current_url
+            return link_href, url
+        else:
+            return link_href, request.status_code
+
+    def check_broken_link(self, url, locator_link):
+        """Check the HTTP response status of a link and click it if accessible.
+
+        Sends a GET request to the provided URL. If the response status
+        code is 200, retrieves the specified locator and clicks the element.
+        Otherwise, returns the HTTP response status code.
+
+        Args:
+            url (str): The URL to check.
+            locator_link (str): The name of the locator attribute.
+
+        Returns:
+            int or None: The HTTP response status code if the link is
+            inaccessible; otherwise, None.
+        """
+        request = requests.get(url)
+        if request.status_code == 200:
+            locator = getattr(self.locators, locator_link)
+            self.element_is_present(locator).click()
+        else:
+            return request.status_code

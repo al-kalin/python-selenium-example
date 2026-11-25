@@ -12,6 +12,7 @@ import random
 from pages.elements_page import (
     ButtonsPage,
     CheckBoxPage,
+    LinksPage,
     RadioButtonPage,
     TextBoxPage,
     WebTablePage,
@@ -290,3 +291,54 @@ class TestElements:
             assert (
                 click == "You have done a dynamic click"
             ), "The dynamic click button was not pressed"
+
+    class TestLinksPage:
+        """
+        Test suite for the Links page functionality.
+
+        Covers link navigation, opening links in new tabs, and
+        validation of HTTP response status codes.
+        """
+
+        def test_check_simple_link(self, driver):
+            """
+            Verify that the Simple Link opens in a new tab
+            and navigates to the correct URL.
+            """
+            links_page = LinksPage(driver, "https://demoqa.com/links")
+            links_page.open()
+            href_link, current_url = links_page.check_new_tab_simple_link()
+            assert href_link == current_url, "the link is broken or url in incorrect"
+
+        def test_bad_request_link(self, driver):
+            """
+            Verify that the Bad Request link returns HTTP status code 400.
+            """
+            links_page = LinksPage(driver, "https://demoqa.com/links")
+            links_page.open()
+            response_code = links_page.check_broken_link(
+                "https://demoqa.com/bad-request", "BAD_REQUEST"
+            )
+            assert response_code == 400, "the link works or the status code is non 400"
+
+        def test_moved_link(self, driver):
+            """
+            Verify that the Moved link returns HTTP status code 301.
+            """
+            links_page = LinksPage(driver, "https://demoqa.com/links")
+            links_page.open()
+            response_code = links_page.check_broken_link(
+                "https://demoqa.com/moved", "MOVED_LINK"
+            )
+            assert response_code == 301, "the link works or the status code is non 301"
+
+        def test_unauthorized_link(self, driver):
+            """
+            Verify that the Unauthorized link returns HTTP status code 401.
+            """
+            links_page = LinksPage(driver, "https://demoqa.com/links")
+            links_page.open()
+            response_code = links_page.check_broken_link(
+                "https://demoqa.com/unauthorized", "UNAUTHORIZED"
+            )
+            assert response_code == 401, "the link works or the status code is non 401"
