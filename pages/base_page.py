@@ -74,6 +74,19 @@ class BasePage:
         return wait(self.driver, timeout).until(EC.element_to_be_clickable(locator))
 
     def go_to_element(self, element):
+        """
+        Scroll the page until the specified web element comes into view.
+
+        Steps:
+            1. Execute a JavaScript command using WebDriver.
+            2. Scroll the page to bring the specified element into view.
+
+        Args:
+            element (WebElement): The web element to scroll into view.
+
+        Expected result:
+            The specified web element is brought into the visible area of the page.
+        """
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
     def action_double_click(self, element):
@@ -115,3 +128,19 @@ class BasePage:
         actions.move_to_element(element)
         actions.context_click(element)
         actions.perform()
+
+    def switch_to_new_tab(self, index):
+        """
+        Switch to a browser tab or window by its index.
+
+        Steps:
+            1. Retrieve the list of currently open browser windows.
+            2. Switch WebDriver focus to the window at the specified index.
+
+        Args:
+            index (int): The index of the browser window to switch to.
+
+        Expected result:
+            WebDriver successfully switches focus to the specified browser window.
+        """
+        self.driver.switch_to.window(self.driver.window_handles[index])
