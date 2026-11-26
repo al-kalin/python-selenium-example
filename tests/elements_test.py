@@ -15,6 +15,7 @@ from pages.elements_page import (
     LinksPage,
     RadioButtonPage,
     TextBoxPage,
+    UploadAndDownloadPage,
     WebTablePage,
 )
 
@@ -342,3 +343,41 @@ class TestElements:
                 "https://demoqa.com/unauthorized", "UNAUTHORIZED"
             )
             assert response_code == 401, "the link works or the status code is non 401"
+
+    class TestUploadAndDownload:
+        """
+        Test suite for the Upload and Download functionality.
+
+        Covers file uploading and downloading, including verification
+        of uploaded file names and downloaded file existence.
+        """
+
+        def test_upload_file(self, driver):
+            """
+            Verify that a file can be uploaded successfully.
+
+            Checks that the uploaded file name matches the original
+            generated file name.
+            """
+
+            upload_download_page = UploadAndDownloadPage(
+                driver, "https://demoqa.com/upload-download"
+            )
+            upload_download_page.open()
+            file_name, result = upload_download_page.upload_file()
+            assert file_name == result, "the file has been uploaded"
+
+        def test_download_file(self, driver):
+            """
+            Verify that a file can be downloaded successfully.
+
+            Checks that the downloaded file exists after the download
+            process is completed.
+            """
+
+            upload_download_page = UploadAndDownloadPage(
+                driver, "https://demoqa.com/upload-download"
+            )
+            upload_download_page.open()
+            check = upload_download_page.download_file()
+            assert check is True, "the file has been downloaded"

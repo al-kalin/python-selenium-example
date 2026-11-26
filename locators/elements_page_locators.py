@@ -107,3 +107,13 @@ class LinksPageLocators:
     BAD_REQUEST = (By.CSS_SELECTOR, "a[id='bad-request']")
     MOVED_LINK = (By.CSS_SELECTOR, "a[id='moved']")
     UNAUTHORIZED = (By.CSS_SELECTOR, "a[id='unauthorized']")
+
+
+class UploadAndDownloadPageLocators:
+    """
+    Locators for elements on the Upload and Download page.
+    """
+    UPLOAD_FILE = (By.CSS_SELECTOR, "input[id='uploadFile']")
+    UPLOADED_FILE_PATH = (By.CSS_SELECTOR, "p[id='uploadedFilePath']")
+
+    DOWNLOAD_FILE = (By.CSS_SELECTOR, "a[id='downloadButton']")
