@@ -1,7 +1,13 @@
-from faker import Faker
-from data.data import Person
+"""
+Module for generating test data and temporary files.
+"""
+
+from pathlib import Path
 
 import random
+
+from faker import Faker
+from data.data import Person
 
 faker_en = Faker("en")
 Faker.seed()
@@ -40,3 +46,24 @@ def generated_person():
         current_address=faker_en.address(),
         permanent_address=faker_en.address(),
     )
+
+
+def generated_file():
+    """
+    Generate a temporary text file with random content.
+
+    Creates a file in the project's temp directory, writes random
+    text into it, and returns the file name and its full path.
+
+    Returns:
+        tuple: File name and full path to the generated file.
+    """
+    path = (
+        Path(__file__).resolve().parent.parent
+        / "temp"
+        / f"file_test{random.randint(0, 999)}.txt"
+    )
+    file = open(path, "w+")
+    file.write(f"Hello world {random.randint(0, 999)}")
+    file.close()
+    return file.name
